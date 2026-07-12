@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#14181F">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mizan">
+<title>Mizan</title>
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:#14181F}
+.mz-root{--ink:#14181F;--surface:#1E232C;--line:#2c333e;--parch:#EDE6D6;--muted:#8A8578;--gold:#C9A24B;
+  max-width:520px;margin:0 auto;min-height:100vh;background:var(--ink);color:var(--parch);
+  font-family:'Inter',system-ui,sans-serif;padding:0 16px calc(44px + env(safe-area-inset-bottom));-webkit-font-smoothing:antialiased}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;padding:calc(22px + env(safe-area-inset-top)) 0 16px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:baseline;gap:9px}
+.brand .ar{font-size:25px;color:var(--gold);font-weight:600}
+.brand .ro{font-family:'Spectral',serif;font-size:20px;letter-spacing:.5px}
+.date{font-size:12px;color:var(--muted);text-transform:capitalize;text-align:right;max-width:150px;line-height:1.3}
+.tabs{display:flex;gap:6px;margin:14px 0 18px}
+.tab{flex:1;padding:10px 0;background:transparent;border:1px solid var(--line);color:var(--muted);
+  border-radius:10px;font-size:13px;font-family:inherit;cursor:pointer;transition:.15s}
+.tab.on{background:var(--surface);color:var(--parch);border-color:var(--gold)}
+.salat-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:16px}
+.salat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 2px;
+  display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:var(--parch);font-family:inherit;transition:.15s}
+.salat .s-ar{font-size:12px;color:var(--muted)}
+.salat .s-t{font-size:12px;font-variant-numeric:tabular-nums}
+.salat.next{border-color:var(--gold);background:#242017}
+.salat.next .s-t{color:var(--gold)}
+.salat.done{background:#1c2620}.salat.done .s-ar{color:#78A98E}
+.salat.sun{opacity:.55}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:15px 15px 13px;margin-bottom:14px}
+.card-h{font-family:'Spectral',serif;font-size:15px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:baseline;color:var(--parch)}
+.wtime{font-size:14px;color:var(--gold)}
+.ctr{display:flex;align-items:center;gap:11px;margin-bottom:13px}
+.ring{flex:none}
+.ctr-mid{flex:1;min-width:0}
+.ctr-ar{font-size:15px;margin-bottom:2px}
+.ctr-cnt{font-size:12.5px;color:var(--gold);font-variant-numeric:tabular-nums}
+.ctr-cnt em{color:var(--muted);font-style:normal}
+.ctr-btns{display:flex;gap:5px}
+.ctr-btns button{padding:8px 9px;min-width:42px;background:#252b34;border:1px solid var(--line);color:var(--parch);
+  border-radius:8px;font-size:12.5px;font-family:inherit;cursor:pointer;transition:.1s}
+.ctr-btns button:active{transform:scale(.94)}
+.ctr-btns .mn{min-width:34px;color:var(--muted)}
+.checks{display:flex;flex-direction:column;gap:8px;margin-top:4px;padding-top:12px;border-top:1px solid var(--line)}
+.chk{display:flex;align-items:center;gap:11px;background:transparent;border:none;padding:4px 0;cursor:pointer;color:var(--parch);font-family:inherit;width:100%}
+.chk .box{width:22px;height:22px;flex:none;border:1.5px solid var(--line);border-radius:6px;display:flex;
+  align-items:center;justify-content:center;font-size:13px;color:#78A98E}
+.chk.on .box{border-color:#78A98E;background:#1c2620}
+.chk-l{flex:1;text-align:left;font-size:14px}
+.chk.on .chk-l{color:var(--muted);text-decoration:line-through}
+.chk-ar{font-size:13px;color:var(--muted)}
+.trow{display:flex;justify-content:space-between;align-items:center;padding:9px 0}
+.name{font-size:14.5px;display:flex;align-items:center;gap:9px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none}
+.adj{display:flex;align-items:center;gap:9px}
+.adj button{width:34px;height:34px;border-radius:8px;background:#252b34;border:1px solid var(--line);
+  color:var(--parch);font-size:16px;cursor:pointer;font-family:inherit}
+.adj .rst{font-size:14px;color:var(--gold)}
+.tv{font-family:'Spectral',serif;font-size:16px;min-width:52px;text-align:center}
+.tv.ov{color:var(--gold)}
+.hint{color:var(--muted);font-size:12px;line-height:1.5;margin-top:12px}
+.hint b{color:var(--gold)}
+.mizan-wrap{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 14px 10px;margin-bottom:8px}
+.beam{transition:transform .6s cubic-bezier(.34,1.3,.5,1)}
+.verdict{text-align:center;font-family:'Spectral',serif;font-size:16px;color:var(--gold);margin-top:2px}
+.pan-legend{display:flex;justify-content:center;gap:18px;margin:8px 0 20px;font-size:11.5px;color:var(--muted)}
+.pan-legend span{display:flex;align-items:center;gap:6px}.pan-legend i{width:8px;height:8px;border-radius:50%}
+.track{margin-bottom:15px}
+.track-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.track-val{font-size:13px}.track-val em{color:var(--muted);font-style:normal}
+.bar{height:8px;background:#252b34;border-radius:5px;overflow:hidden}.fill{height:100%;border-radius:5px;transition:width .5s}
+.over{font-size:11px;color:var(--gold);margin-top:4px;display:inline-block}
+.wtotal{margin-top:4px;padding-top:15px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+.wtotal strong{color:var(--parch);font-family:'Spectral',serif;font-size:17px}
+.wt-sub{font-size:12px}
+.set-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.set-row:last-of-type{border-bottom:none}
+.set-row label{font-size:14px;display:flex;align-items:center;gap:9px}
+.stepper{display:flex;align-items:center;gap:12px}
+.stepper button{width:34px;height:34px;border-radius:8px;background:#252b34;border:1px solid var(--line);color:var(--parch);font-size:17px;cursor:pointer;font-family:inherit}
+.stepper span{font-family:'Spectral',serif;font-size:15px;min-width:44px;text-align:center}
+.seg{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.seg button{padding:7px 10px;background:#252b34;border:1px solid var(--line);color:var(--muted);border-radius:7px;font-size:12px;font-family:inherit;cursor:pointer}
+.seg button.on{border-color:var(--gold);color:var(--gold)}
+.danger{margin-top:6px;width:100%;padding:13px;background:transparent;border:1px solid #6b3b3b;color:#c88;border-radius:10px;font-family:inherit;font-size:13px;cursor:pointer}
+button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.beam,.fill{transition:none}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+"use strict";
+/* ── Prières (PrayTimes, offline) ── */
+var dtr=function(d){return d*Math.PI/180},rtd=function(r){return r*180/Math.PI};
+var dsin=function(d){return Math.sin(dtr(d))},dcos=function(d){return Math.cos(dtr(d))},dtan=function(d){return Math.tan(dtr(d))};
+var darcsin=function(x){return rtd(Math.asin(x))},darccos=function(x){return rtd(Math.acos(x))};
+var darctan2=function(y,x){return rtd(Math.atan2(y,x))},darccot=function(x){return rtd(Math.atan(1/x))};
+function fixAngle(a){a-=360*Math.floor(a/360);return a<0?a+360:a}
+function fixHour(a){a-=24*Math.floor(a/24);return a<0?a+24:a}
+function julian(y,m,d){if(m<=2){y-=1;m+=12}var A=Math.floor(y/100),B=2-A+Math.floor(A/4);
+  return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524.5}
+function sunPos(jd){var D=jd-2451545.0;
+  var g=fixAngle(357.529+0.98560028*D),q=fixAngle(280.459+0.98564736*D);
+  var L=fixAngle(q+1.915*dsin(g)+0.020*dsin(2*g)),e=23.439-0.00000036*D;
+  var decl=darcsin(dsin(e)*dsin(L)),RA=fixHour(darctan2(dcos(e)*dsin(L),dcos(L))/15);
+  return{decl:decl,eqt:q/15-RA}}
+function midDay(jd,t){return fixHour(12-sunPos(jd+t).eqt)}
+function angleTime(jd,lat,angle,t,dir){var decl=sunPos(jd+t).decl,noon=midDay(jd,t);
+  var x=(-dsin(angle)-dsin(decl)*dsin(lat))/(dcos(decl)*dcos(lat));var t2=darccos(x)/15;
+  return noon+(dir==="ccw"?-t2:t2)}
+function asrT(jd,lat,factor,t){var decl=sunPos(jd+t).decl;
+  var angle=-darccot(factor+dtan(Math.abs(lat-decl)));return angleTime(jd,lat,angle,t,"cw")}
+function tDiff(a,b){return fixHour(b-a)}
+function prayerTimes(date,lat,lng,params){
+  var y=date.getFullYear(),mo=date.getMonth()+1,da=date.getDate();
+  var tz=-date.getTimezoneOffset()/60,jd=julian(y,mo,da)-lng/(15*24);
+  var t={fajr:angleTime(jd,lat,params.fajr,5/24,"ccw"),shuruq:angleTime(jd,lat,0.833,5/24,"ccw"),
+    dhuhr:midDay(jd,12/24)+1/60,asr:asrT(jd,lat,params.asr,13/24),
+    maghrib:angleTime(jd,lat,0.833,18/24,"cw"),isha:angleTime(jd,lat,params.isha,18/24,"cw")};
+  var night=tDiff(t.maghrib,t.shuruq),portion=function(a){return(a/60)*night};
+  t.fajr=(isNaN(t.fajr)||tDiff(t.fajr,t.shuruq)>portion(params.fajr))?t.shuruq-portion(params.fajr):t.fajr;
+  t.isha=(isNaN(t.isha)||tDiff(t.maghrib,t.isha)>portion(params.isha))?t.maghrib+portion(params.isha):t.isha;
+  for(var k in t)t[k]=fixHour(t[k]+tz-lng/15);
+  return t}
+function fmtT(h){if(isNaN(h))return"--:--";h=fixHour(h+0.5/60);var H=Math.floor(h),M=Math.floor((h-H)*60);
+  return(H<10?"0":"")+H+":"+(M<10?"0":"")+M}
+var METHODS={MWL:{fajr:18,isha:17},Maroc:{fajr:19,isha:17},ISNA:{fajr:15,isha:15},Egypte:{fajr:19.5,isha:17.5}};
+
+/* ── Modèle ── */
+var DOMAINS=[
+  {id:"sommeil",label:"Sommeil",color:"#6272B8",pan:"left"},
+  {id:"spirituel",label:"Spirituel",color:"#78A98E",pan:"left",auto:true},
+  {id:"boulot",label:"Boulot",color:"#4C93A8",pan:"right"},
+  {id:"dev",label:"Dév / Formation",color:"#A57BB5",pan:"right"}];
+var SALAT=[{id:"fajr",label:"Fajr",ar:"الفجر"},{id:"shuruq",label:"Shuruq",ar:"الشروق",noPray:true},
+  {id:"dhuhr",label:"Dhuhr",ar:"الظهر"},{id:"asr",label:"Asr",ar:"العصر"},
+  {id:"maghrib",label:"Maghrib",ar:"المغرب"},{id:"isha",label:"Isha",ar:"العشاء"}];
+var COUNTERS=[{id:"tahlil",label:"Tahlīl",ar:"لا إله إلا الله",steps:[100,10]},
+  {id:"salawat",label:"Salawât",ar:"الصلاة على النبي ﷺ",steps:[100,10]},
+  {id:"istighfar",label:"Istighfâr",ar:"الاستغفار",steps:[100,10]}];
+var CHECKS=[{id:"hizb1",label:"Hizb (1)",ar:"الحزب"},{id:"hizb2",label:"Hizb (2)",ar:"الحزب"},
+  {id:"rabita",label:"Du'ā' ar-Rābita",ar:"دعاء الرابطة"},{id:"night",label:"Qiyām — 8 rak'ât",ar:"قيام الليل"}];
+var DEFAULT_CFG={base:{weekday:{sommeil:7,boulot:8,dev:1},weekend:{sommeil:8,boulot:0,dev:2}},
+  method:"MWL",asr:1,lat:50.4109,lng:4.4446,
+  wTarget:{tahlil:3000,salawat:1000,istighfar:300},
+  wMin:{tahlil:45,salawat:25,istighfar:10,hizb:12,rabita:7,night:30,fard:8}};
+
+/* ── Dates & format ── */
+function ymd(d){return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2)}
+function isWeekend(d){return d.getDay()===0||d.getDay()===6}
+function mondayOf(d){var x=new Date(d);x.setDate(x.getDate()-((x.getDay()+6)%7));x.setHours(0,0,0,0);return x}
+function weekDates(a){var m=mondayOf(a),r=[];for(var i=0;i<7;i++){var d=new Date(m);d.setDate(m.getDate()+i);r.push(d)}return r}
+function frDate(d){return d.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"})}
+function fmt(h){if(!h)return"0h";var w=Math.floor(h),m=Math.round((h-w)*60);return m===0?w+"h":w+"h"+("0"+m).slice(-2)}
+function esc(s){return String(s)}
+
+/* ── Persistance ── */
+function load(k,fb){try{var v=localStorage.getItem(k);return v?JSON.parse(v):fb}catch(e){return fb}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+
+/* ── Wird → temps ── */
+function wirdHours(dayW,cfg){if(!dayW)return 0;var m=0;
+  COUNTERS.forEach(function(c){var cnt=dayW[c.id]||0,tgt=cfg.wTarget[c.id]||1;
+    m+=Math.min(1,cnt/tgt)*(cfg.wMin[c.id]||0)});
+  if(dayW.hizb1)m+=cfg.wMin.hizb;if(dayW.hizb2)m+=cfg.wMin.hizb;
+  if(dayW.rabita)m+=cfg.wMin.rabita;if(dayW.night)m+=cfg.wMin.night;
+  SALAT.forEach(function(s){if(!s.noPray&&dayW[s.id])m+=cfg.wMin.fard});
+  return m/60}
+function fullSpiritualHours(cfg){return(COUNTERS.reduce(function(s,c){return s+cfg.wMin[c.id]},0)
+  +cfg.wMin.hizb*2+cfg.wMin.rabita+cfg.wMin.night+cfg.wMin.fard*5)/60}
+
+/* ── État ── */
+var lc=load("mizan:cfg",{});
+var state={tab:"today",
+  cfg:{base:{weekday:Object.assign({},DEFAULT_CFG.base.weekday,(lc.base||{}).weekday||{}),
+             weekend:Object.assign({},DEFAULT_CFG.base.weekend,(lc.base||{}).weekend||{})},
+       method:lc.method||DEFAULT_CFG.method,asr:lc.asr||DEFAULT_CFG.asr,
+       lat:lc.lat||DEFAULT_CFG.lat,lng:lc.lng||DEFAULT_CFG.lng,
+       wTarget:Object.assign({},DEFAULT_CFG.wTarget,lc.wTarget||{}),
+       wMin:Object.assign({},DEFAULT_CFG.wMin,lc.wMin||{})},
+  days:load("mizan:days",{}),cleared:false};
+
+function saveCfg(){save("mizan:cfg",state.cfg)}
+function saveDays(){save("mizan:days",state.days)}
+function getDay(key){if(!state.days[key])state.days[key]={overrides:{},wird:{}};
+  if(!state.days[key].overrides)state.days[key].overrides={};
+  if(!state.days[key].wird)state.days[key].wird={};return state.days[key]}
+
+function dayValue(domId,date){var key=ymd(date),day=state.days[key];
+  if(domId==="spirituel")return wirdHours(day&&day.wird,state.cfg);
+  var ov=day&&day.overrides&&day.overrides[domId];
+  if(ov!==undefined&&ov!==null)return ov;
+  return state.cfg.base[isWeekend(date)?"weekend":"weekday"][domId]||0}
+
+/* ── Rendu ── */
+function h(tag,attrs,inner){var a="";for(var k in attrs){if(attrs[k]!=null)a+=" "+k+'="'+attrs[k]+'"'}
+  return"<"+tag+a+">"+(inner||"")+"</"+tag+">"}
+
+function renderSalat(times,wird,nextId){
+  return SALAT.map(function(s){
+    var active=nextId===s.id,prayed=!s.noPray&&wird[s.id];
+    var cls="salat"+(active?" next":"")+(prayed?" done":"")+(s.noPray?" sun":"");
+    var at=s.noPray?"":'data-action="salat" data-id="'+s.id+'"';
+    return'<button class="'+cls+'" '+at+(s.noPray?"disabled":"")+'>'+
+      '<span class="s-ar">'+s.ar+'</span><span class="s-t">'+fmtT(times[s.id])+'</span></button>'}).join("")}
+
+function renderCounters(wird,cfg){
+  return COUNTERS.map(function(c){
+    var cnt=wird[c.id]||0,tgt=cfg.wTarget[c.id],pct=Math.min(100,cnt/tgt*100);
+    var R=19,C=2*Math.PI*R,done=cnt>=tgt;
+    return'<div class="ctr">'+
+      '<svg width="46" height="46" viewBox="0 0 46 46" class="ring">'+
+        '<circle cx="23" cy="23" r="'+R+'" fill="none" stroke="#252b34" stroke-width="4"/>'+
+        '<circle cx="23" cy="23" r="'+R+'" fill="none" stroke="'+(done?"#78A98E":"#C9A24B")+'" stroke-width="4" stroke-dasharray="'+C+'" stroke-dashoffset="'+(C*(1-pct/100))+'" stroke-linecap="round" transform="rotate(-90 23 23)"/>'+
+      '</svg>'+
+      '<div class="ctr-mid"><div class="ctr-ar">'+c.ar+'</div>'+
+        '<div class="ctr-cnt">'+cnt+' <em>/ '+tgt+'</em></div></div>'+
+      '<div class="ctr-btns">'+
+        '<button data-action="wird-add" data-id="'+c.id+'" data-amt="'+c.steps[0]+'">+'+c.steps[0]+'</button>'+
+        '<button data-action="wird-add" data-id="'+c.id+'" data-amt="'+c.steps[1]+'">+'+c.steps[1]+'</button>'+
+        '<button class="mn" data-action="wird-add" data-id="'+c.id+'" data-amt="-'+c.steps[1]+'">−</button>'+
+      '</div></div>'}).join("")}
+
+function renderChecks(wird){
+  return'<div class="checks">'+CHECKS.map(function(ch){
+    return'<button class="chk'+(wird[ch.id]?" on":"")+'" data-action="wird-toggle" data-id="'+ch.id+'">'+
+      '<span class="box">'+(wird[ch.id]?"✓":"")+'</span>'+
+      '<span class="chk-l">'+ch.label+'</span><span class="chk-ar">'+ch.ar+'</span></button>'}).join("")+'</div>'}
+
+function renderToday(){
+  var today=new Date(),key=ymd(today),cfg=state.cfg;
+  var params=Object.assign({},METHODS[cfg.method],{asr:cfg.asr});
+  var times=prayerTimes(today,cfg.lat,cfg.lng,params);
+  var nowH=today.getHours()+today.getMinutes()/60;
+  var pray=SALAT.filter(function(s){return!s.noPray});
+  var next=pray.find(function(s){return times[s.id]>nowH});
+  var nextId=next?next.id:(pray.every(function(s){return times[s.id]<=nowH})?"fajr":null);
+  var day=getDay(key),wird=day.wird;
+  var temps=DOMAINS.filter(function(d){return!d.auto}).map(function(dom){
+    var ov=day.overrides[dom.id],val=dayValue(dom.id,today),isOv=ov!==undefined&&ov!==null;
+    return'<div class="trow"><span class="name"><span class="dot" style="background:'+dom.color+'"></span>'+dom.label+'</span>'+
+      '<div class="adj">'+
+      '<button data-action="temps" data-id="'+dom.id+'" data-amt="-0.5">−</button>'+
+      '<span class="tv'+(isOv?" ov":"")+'">'+fmt(val)+'</span>'+
+      '<button data-action="temps" data-id="'+dom.id+'" data-amt="0.5">+</button>'+
+      (isOv?'<button class="rst" data-action="temps-reset" data-id="'+dom.id+'">↺</button>':'')+
+      '</div></div>'}).join("");
+  return'<div class="salat-strip">'+renderSalat(times,wird,nextId)+'</div>'+
+    '<div class="card"><div class="card-h">Programme spirituel <span class="wtime">'+fmt(wirdHours(wird,cfg))+'</span></div>'+
+      renderCounters(wird,cfg)+renderChecks(wird)+'</div>'+
+    '<div class="card"><div class="card-h">Temps du jour</div>'+temps+
+      '<p class="hint">Valeurs par défaut = ta journée-type ('+(isWeekend(today)?"week-end":"semaine")+'). Touche seulement pour corriger une exception. <b>↺</b> revient à la baseline.</p></div>'}
+
+function renderMizan(lr,rr){
+  var diff=rr-lr,tilt=Math.max(-13,Math.min(13,diff*26)),rad=tilt*Math.PI/180;
+  var cx=150,cy=74,L=104,H=46;
+  var lx=cx-L*Math.cos(rad),ly=cy-L*Math.sin(rad),rx=cx+L*Math.cos(rad),ry=cy+L*Math.sin(rad);
+  function disc(id,i,px,py){var t=DOMAINS.find(function(d){return d.id===id});
+    return'<circle cx="'+(px+(i===0?-11:11))+'" cy="'+py+'" r="9" fill="'+t.color+'" stroke="#0f1319" stroke-width="1.5"/>'}
+  var left=DOMAINS.filter(function(d){return d.pan==="left"}),right=DOMAINS.filter(function(d){return d.pan==="right"});
+  var verdict="En équilibre";if(diff>0.18)verdict="Penché vers le travail";else if(diff<-0.18)verdict="Penché vers le repos & le sens";
+  return'<div class="mizan-wrap"><svg viewBox="0 0 300 172" width="100%" role="img" aria-label="Balance : '+verdict+'">'+
+    '<line x1="150" y1="74" x2="150" y2="150" stroke="#C9A24B" stroke-width="3"/>'+
+    '<polygon points="150,150 138,168 162,168" fill="#C9A24B"/>'+
+    '<g class="beam" style="transform-origin:150px 74px;transform:rotate('+tilt+'deg)">'+
+      '<line x1="'+lx+'" y1="'+ly+'" x2="'+rx+'" y2="'+ry+'" stroke="#C9A24B" stroke-width="4" stroke-linecap="round"/>'+
+      '<circle cx="150" cy="74" r="5" fill="#EDE6D6"/>'+
+      '<line x1="'+lx+'" y1="'+ly+'" x2="'+lx+'" y2="'+(ly+H)+'" stroke="#5b5344" stroke-width="1.5"/>'+
+      '<line x1="'+rx+'" y1="'+ry+'" x2="'+rx+'" y2="'+(ry+H)+'" stroke="#5b5344" stroke-width="1.5"/>'+
+      '<path d="M '+(lx-22)+' '+(ly+H)+' A 22 14 0 0 0 '+(lx+22)+' '+(ly+H)+'" fill="none" stroke="#8A8578" stroke-width="2"/>'+
+      '<path d="M '+(rx-22)+' '+(ry+H)+' A 22 14 0 0 0 '+(rx+22)+' '+(ry+H)+'" fill="none" stroke="#8A8578" stroke-width="2"/>'+
+      left.map(function(d,i){return disc(d.id,i,lx,ly+H+2)}).join("")+
+      right.map(function(d,i){return disc(d.id,i,rx,ry+H+2)}).join("")+
+    '</g></svg><div class="verdict">'+verdict+'</div></div>'}
+
+function renderWeek(){
+  var today=new Date(),key=ymd(today),cfg=state.cfg,week=weekDates(today);
+  var elapsed=week.filter(function(d){return ymd(d)<=key});
+  var actual={},expected={},target={};
+  function baselineDay(id,date){return id==="spirituel"?fullSpiritualHours(cfg):(cfg.base[isWeekend(date)?"weekend":"weekday"][id]||0)}
+  DOMAINS.forEach(function(dom){
+    actual[dom.id]=elapsed.reduce(function(s,d){return s+dayValue(dom.id,d)},0);
+    expected[dom.id]=elapsed.reduce(function(s,d){return s+baselineDay(dom.id,d)},0);});
+  target={sommeil:cfg.base.weekday.sommeil*5+cfg.base.weekend.sommeil*2,
+    boulot:cfg.base.weekday.boulot*5+cfg.base.weekend.boulot*2,
+    dev:cfg.base.weekday.dev*5+cfg.base.weekend.dev*2,spirituel:fullSpiritualHours(cfg)*7};
+  function sum(ids,o){return ids.reduce(function(s,i){return s+(o[i]||0)},0)}
+  var lIds=["sommeil","spirituel"],rIds=["boulot","dev"];
+  var lr=sum(lIds,expected)?sum(lIds,actual)/sum(lIds,expected):0;
+  var rr=sum(rIds,expected)?sum(rIds,actual)/sum(rIds,expected):0;
+  var tracks=DOMAINS.map(function(dom){
+    var a=actual[dom.id],t=target[dom.id]||0,pct=t?Math.min(100,a/t*100):0,over=t&&a>t;
+    return'<div class="track"><div class="track-top"><span class="name"><span class="dot" style="background:'+dom.color+'"></span>'+dom.label+'</span>'+
+      '<span class="track-val">'+fmt(a)+' <em>/ '+fmt(t)+'</em></span></div>'+
+      '<div class="bar"><div class="fill" style="width:'+pct+'%;background:'+dom.color+'"></div></div>'+
+      (over?'<span class="over">dépassé de '+fmt(a-t)+'</span>':'')+'</div>'}).join("");
+  var tot=DOMAINS.reduce(function(s,d){return s+actual[d.id]},0);
+  return renderMizan(lr,rr)+
+    '<div class="pan-legend"><span><i style="background:#78A98E"></i>Restauration & sens</span>'+
+    '<span><i style="background:#4C93A8"></i>Travail & progression</span></div>'+tracks+
+    '<div class="wtotal">Cumul écoulé : <strong>'+fmt(tot)+'</strong><span class="wt-sub"> · '+elapsed.length+'/7 jours</span></div>'}
+
+function stepper(action,extra,val,amt){
+  return'<div class="stepper">'+
+    '<button data-action="'+action+'" '+extra+' data-amt="-'+amt+'">−</button>'+
+    '<span>'+(Number.isInteger(val)?val:val.toFixed(1))+'</span>'+
+    '<button data-action="'+action+'" '+extra+' data-amt="'+amt+'">+</button></div>'}
+
+function renderSettings(){
+  var cfg=state.cfg,today=new Date();
+  var params=Object.assign({},METHODS[cfg.method],{asr:cfg.asr});
+  var times=prayerTimes(today,cfg.lat,cfg.lng,params);
+  var D3=DOMAINS.filter(function(d){return!d.auto});
+  function baseRows(kind){return D3.map(function(d){
+    return'<div class="set-row"><label><span class="dot" style="background:'+d.color+'"></span>'+d.label+'</label>'+
+      stepper("base",'data-kind="'+kind+'" data-id="'+d.id+'"',cfg.base[kind][d.id],0.5)+'</div>'}).join("")}
+  var methodBtns=Object.keys(METHODS).map(function(m){
+    return'<button class="'+(cfg.method===m?"on":"")+'" data-action="method" data-id="'+m+'">'+m+'</button>'}).join("");
+  var tgtRows=COUNTERS.map(function(c){
+    return'<div class="set-row"><label>'+c.label+'</label>'+stepper("wtarget",'data-id="'+c.id+'"',cfg.wTarget[c.id],100)+'</div>'}).join("");
+  var minRows=[["tahlil","Tahlīl"],["salawat","Salawât"],["istighfar","Istighfâr"],["hizb","Hizb (chacun)"],["rabita","Rābita"],["night","Qiyām"],["fard","Farḍ (chaque prière)"]].map(function(p){
+    return'<div class="set-row"><label>'+p[1]+'</label>'+stepper("wmin",'data-id="'+p[0]+'"',cfg.wMin[p[0]],5)+'</div>'}).join("");
+  var preview=SALAT.filter(function(s){return!s.noPray}).map(function(s){return s.label+" "+fmtT(times[s.id])}).join(" · ");
+  return'<div class="card"><div class="card-h">Journée-type — semaine</div>'+baseRows("weekday")+'</div>'+
+    '<div class="card"><div class="card-h">Journée-type — week-end</div>'+baseRows("weekend")+'</div>'+
+    '<div class="card"><div class="card-h">Prière — Charleroi</div>'+
+      '<div class="set-row"><label>Méthode</label><div class="seg">'+methodBtns+'</div></div>'+
+      '<div class="set-row"><label>Asr</label><div class="seg">'+
+        '<button class="'+(cfg.asr===1?"on":"")+'" data-action="asr" data-id="1">Standard</button>'+
+        '<button class="'+(cfg.asr===2?"on":"")+'" data-action="asr" data-id="2">Hanafi</button></div></div>'+
+      '<p class="hint">Aperçu aujourd’hui : '+preview+'. Ajustement haute-latitude actif (été belge).</p></div>'+
+    '<div class="card"><div class="card-h">Wird — objectifs</div>'+tgtRows+'</div>'+
+    '<div class="card"><div class="card-h">Wird — minutes estimées (→ temps spirituel)</div>'+minRows+
+      '<p class="hint">Journée complète ≈ '+fmt(fullSpiritualHours(cfg))+' · objectif hebdo '+fmt(fullSpiritualHours(cfg)*7)+'</p></div>'+
+    '<p class="hint">Efface uniquement les exceptions et le wird saisis cette semaine. Ta journée-type reste intacte.</p>'+
+    '<button class="danger" data-action="reset">'+(state.cleared?"Effacé ✓":"Effacer mes saisies de la semaine")+'</button>'}
+
+function render(){
+  var body;
+  if(state.tab==="today")body=renderToday();
+  else if(state.tab==="week")body=renderWeek();
+  else body=renderSettings();
+  var tabs=[["today","Aujourd’hui"],["week","Semaine"],["settings","Réglages"]].map(function(t){
+    return'<button class="tab'+(state.tab===t[0]?" on":"")+'" data-action="tab" data-id="'+t[0]+'">'+t[1]+'</button>'}).join("");
+  document.getElementById("app").innerHTML=
+    '<div class="mz-root"><header class="hd"><div class="brand"><span class="ar">ميزان</span><span class="ro">Mizan</span></div>'+
+    '<div class="date">'+frDate(new Date())+'</div></header>'+
+    '<nav class="tabs">'+tabs+'</nav><section class="pane">'+body+'</section></div>'}
+
+/* ── Interactions ── */
+document.getElementById("app").addEventListener("click",function(e){
+  var el=e.target.closest("[data-action]");if(!el)return;
+  var act=el.getAttribute("data-action"),id=el.getAttribute("data-id"),amt=parseFloat(el.getAttribute("data-amt"));
+  var key=ymd(new Date());
+  if(act==="tab"){state.tab=id;state.cleared=false;return render()}
+  if(act==="salat"){var d=getDay(key);d.wird[id]=!d.wird[id];saveDays();return render()}
+  if(act==="wird-add"){var d2=getDay(key),tgt=state.cfg.wTarget[id];
+    d2.wird[id]=Math.max(0,Math.min(tgt,(d2.wird[id]||0)+amt));saveDays();return render()}
+  if(act==="wird-toggle"){var d3=getDay(key);d3.wird[id]=!d3.wird[id];saveDays();return render()}
+  if(act==="temps"){var d4=getDay(key),cur=dayValue(id,new Date());
+    d4.overrides[id]=Math.max(0,cur+amt);saveDays();return render()}
+  if(act==="temps-reset"){var d5=getDay(key);delete d5.overrides[id];saveDays();return render()}
+  if(act==="base"){var kind=el.getAttribute("data-kind");
+    state.cfg.base[kind][id]=Math.max(0,state.cfg.base[kind][id]+amt);saveCfg();return render()}
+  if(act==="wtarget"){state.cfg.wTarget[id]=Math.max(0,Math.round(state.cfg.wTarget[id]+amt));saveCfg();return render()}
+  if(act==="wmin"){state.cfg.wMin[id]=Math.max(0,Math.round(state.cfg.wMin[id]+amt));saveCfg();return render()}
+  if(act==="method"){state.cfg.method=id;saveCfg();return render()}
+  if(act==="asr"){state.cfg.asr=parseInt(id,10);saveCfg();return render()}
+  if(act==="reset"){weekDates(new Date()).forEach(function(d){delete state.days[ymd(d)]});saveDays();
+    state.cleared=true;render();setTimeout(function(){state.cleared=false;render()},1800);return}
+});
+
+render();
+</script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').catch(function(e){console.log('SW',e)});
+  });
+}
+</script>
+</body>
+</html>
