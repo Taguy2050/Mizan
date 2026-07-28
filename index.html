@@ -37,8 +37,12 @@ body{margin:0;background:#14181F}
 .salat.done{background:#1c2620}.salat.done .s-ar{color:#78A98E}
 .salat.sun{opacity:.55}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:15px 15px 13px;margin-bottom:14px}
-.card-h{font-family:'Spectral',serif;font-size:15px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:baseline;color:var(--parch)}
+.card-h{font-family:'Spectral',serif;font-size:15px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:baseline;color:var(--parch)}
 .wtime{font-size:14px;color:var(--gold)}
+.sec-h{display:flex;justify-content:space-between;align-items:baseline;margin:16px 0 9px;
+  font-size:11px;color:var(--gold);letter-spacing:.4px;text-transform:uppercase}
+.sec-h .sec-ar{font-size:13px;text-transform:none;letter-spacing:0}
+.sec-first{margin-top:2px}
 .ctr{display:flex;align-items:center;gap:11px;margin-bottom:13px}
 .ring{flex:none}
 .ctr-mid{flex:1;min-width:0}
@@ -50,14 +54,21 @@ body{margin:0;background:#14181F}
   border-radius:8px;font-size:12.5px;font-family:inherit;cursor:pointer;transition:.1s}
 .ctr-btns button:active{transform:scale(.94)}
 .ctr-btns .mn{min-width:34px;color:var(--muted)}
-.checks{display:flex;flex-direction:column;gap:8px;margin-top:4px;padding-top:12px;border-top:1px solid var(--line)}
-.chk{display:flex;align-items:center;gap:11px;background:transparent;border:none;padding:4px 0;cursor:pointer;color:var(--parch);font-family:inherit;width:100%}
+.chk{display:flex;align-items:center;gap:11px;background:transparent;border:none;padding:6px 0;cursor:pointer;color:var(--parch);font-family:inherit;width:100%}
 .chk .box{width:22px;height:22px;flex:none;border:1.5px solid var(--line);border-radius:6px;display:flex;
   align-items:center;justify-content:center;font-size:13px;color:#78A98E}
 .chk.on .box{border-color:#78A98E;background:#1c2620}
 .chk-l{flex:1;text-align:left;font-size:14px}
 .chk.on .chk-l{color:var(--muted);text-decoration:line-through}
 .chk-ar{font-size:13px;color:var(--muted)}
+.hizb-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0}
+.hizb-row .name{font-size:14px}
+.hizb-row .name em{color:var(--muted);font-style:normal;font-size:12px}
+.khatm{margin:8px 0 4px;padding:10px 12px;background:#181d25;border:1px solid var(--line);border-radius:10px}
+.khatm-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--muted);margin-bottom:7px}
+.khatm-top b{color:var(--gold);font-family:'Spectral',serif;font-size:14px}
+.khatm .bar{height:6px;background:#252b34;border-radius:4px;overflow:hidden}
+.khatm .fill{height:100%;background:#78A98E;border-radius:4px}
 .trow{display:flex;justify-content:space-between;align-items:center;padding:9px 0}
 .name{font-size:14.5px;display:flex;align-items:center;gap:9px}
 .dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none}
@@ -67,6 +78,7 @@ body{margin:0;background:#14181F}
 .adj .rst{font-size:14px;color:var(--gold)}
 .tv{font-family:'Spectral',serif;font-size:16px;min-width:52px;text-align:center}
 .tv.ov{color:var(--gold)}
+.tv.sm{min-width:24px}
 .hint{color:var(--muted);font-size:12px;line-height:1.5;margin-top:12px}
 .hint b{color:var(--gold)}
 .mizan-wrap{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 14px 10px;margin-bottom:8px}
@@ -77,7 +89,7 @@ body{margin:0;background:#14181F}
 .track{margin-bottom:15px}
 .track-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
 .track-val{font-size:13px}.track-val em{color:var(--muted);font-style:normal}
-.bar{height:8px;background:#252b34;border-radius:5px;overflow:hidden}.fill{height:100%;border-radius:5px;transition:width .5s}
+.bar{height:8px;background:#252b34;border-radius:5px;overflow:hidden}.fill{height:100%;border-radius:5px}
 .over{font-size:11px;color:var(--gold);margin-top:4px;display:inline-block}
 .wtotal{margin-top:4px;padding-top:15px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
 .wtotal strong{color:var(--parch);font-family:'Spectral',serif;font-size:17px}
@@ -110,8 +122,10 @@ function fixHour(a){a-=24*Math.floor(a/24);return a<0?a+24:a}
 function julian(y,m,d){if(m<=2){y-=1;m+=12}var A=Math.floor(y/100),B=2-A+Math.floor(A/4);
   return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524.5}
 function sunPos(jd){var D=jd-2451545.0;
-  var g=fixAngle(357.529+0.98560028*D),q=fixAngle(280.459+0.98564736*D);
-  var L=fixAngle(q+1.915*dsin(g)+0.020*dsin(2*g)),e=23.439-0.00000036*D;
+  var g=fixAngle(357.529+0.98560028*D);
+  var q=fixAngle(280.459+0.98564736*D);
+  var L=fixAngle(q+1.915*dsin(g)+0.020*dsin(2*g));
+  var e=23.439-0.00000036*D;
   var decl=darcsin(dsin(e)*dsin(L)),RA=fixHour(darctan2(dcos(e)*dsin(L),dcos(L))/15);
   return{decl:decl,eqt:q/15-RA}}
 function midDay(jd,t){return fixHour(12-sunPos(jd+t).eqt)}
@@ -148,12 +162,29 @@ var SALAT=[{id:"fajr",label:"Fajr",ar:"الفجر"},{id:"shuruq",label:"Shuruq",
 var COUNTERS=[{id:"tahlil",label:"Tahlīl",ar:"لا إله إلا الله",steps:[100,10]},
   {id:"salawat",label:"Salawât",ar:"الصلاة على النبي ﷺ",steps:[100,10]},
   {id:"istighfar",label:"Istighfâr",ar:"الاستغفار",steps:[100,10]}];
-var CHECKS=[{id:"hizb1",label:"Hizb (1)",ar:"الحزب"},{id:"hizb2",label:"Hizb (2)",ar:"الحزب"},
-  {id:"rabita",label:"Du'ā' ar-Rābita",ar:"دعاء الرابطة"},{id:"night",label:"Qiyām — 8 rak'ât",ar:"قيام الليل"}];
-var DEFAULT_CFG={base:{weekday:{sommeil:7,boulot:8,dev:1},weekend:{sommeil:8,boulot:0,dev:2}},
+/* actes cochables (case = fait) avec leur clé de minutes */
+var CHECK_META={
+  witr:{label:"Witr — 11 rak'ât",ar:"الوتر"},
+  ishraq:{label:"Jalsa al-Ishrāq",ar:"جلسة الإشراق"},
+  shuruq:{label:"2 rak'ât ash-Shurūq",ar:"ركعتا الشروق"},
+  duha:{label:"Ḍuḥā / Awwābīn",ar:"الضحى"},
+  rawatib:{label:"Sunan Rawātib",ar:"السنن الرواتب"},
+  sourates:{label:"Wird des sourates",ar:"ورد السور"},
+  muhasaba:{label:"Muḥāsaba + adhkār",ar:"محاسبة النوم"},
+  rabita:{label:"Du'ā' ar-Rābita",ar:"دعاء الرابطة"}};
+var SECTIONS=[
+  {ar:"قيام الليل والفجر",fr:"Nuit & aube",checks:["witr","ishraq","shuruq"]},
+  {ar:"الضحى والرواتب",fr:"Matinée",checks:["duha","rawatib"]},
+  {ar:"الأوراد",fr:"Dhikr",counters:true},
+  {ar:"القرآن",fr:"Coran",coran:true},
+  {ar:"آداب الليل والرابطة",fr:"Avant de dormir",checks:["muhasaba","rabita"]}];
+
+var DEFAULT_CFG={
+  base:{weekday:{sommeil:7,boulot:8,dev:1},weekend:{sommeil:8,boulot:0,dev:2}},
   method:"MWL",asr:1,lat:50.4109,lng:4.4446,
   wTarget:{tahlil:3000,salawat:1000,istighfar:300},
-  wMin:{tahlil:45,salawat:25,istighfar:10,hizb:12,rabita:7,night:30,fard:8}};
+  wMin:{tahlil:45,salawat:25,istighfar:10,witr:35,ishraq:25,shuruq:5,duha:12,
+        rawatib:25,sourates:40,hizb:10,muhasaba:10,rabita:7,fard:8}};
 
 /* ── Dates & format ── */
 function ymd(d){return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2)}
@@ -162,22 +193,49 @@ function mondayOf(d){var x=new Date(d);x.setDate(x.getDate()-((x.getDay()+6)%7))
 function weekDates(a){var m=mondayOf(a),r=[];for(var i=0;i<7;i++){var d=new Date(m);d.setDate(m.getDate()+i);r.push(d)}return r}
 function frDate(d){return d.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"})}
 function fmt(h){if(!h)return"0h";var w=Math.floor(h),m=Math.round((h-w)*60);return m===0?w+"h":w+"h"+("0"+m).slice(-2)}
-function esc(s){return String(s)}
 
 /* ── Persistance ── */
 function load(k,fb){try{var v=localStorage.getItem(k);return v?JSON.parse(v):fb}catch(e){return fb}}
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 
 /* ── Wird → temps ── */
+var CHECK_IDS=["witr","ishraq","shuruq","duha","rawatib","sourates","muhasaba","rabita"];
 function wirdHours(dayW,cfg){if(!dayW)return 0;var m=0;
   COUNTERS.forEach(function(c){var cnt=dayW[c.id]||0,tgt=cfg.wTarget[c.id]||1;
     m+=Math.min(1,cnt/tgt)*(cfg.wMin[c.id]||0)});
-  if(dayW.hizb1)m+=cfg.wMin.hizb;if(dayW.hizb2)m+=cfg.wMin.hizb;
-  if(dayW.rabita)m+=cfg.wMin.rabita;if(dayW.night)m+=cfg.wMin.night;
+  CHECK_IDS.forEach(function(k){if(dayW[k])m+=cfg.wMin[k]||0});
+  m+=(dayW.hizb||0)*(cfg.wMin.hizb||0);
   SALAT.forEach(function(s){if(!s.noPray&&dayW[s.id])m+=cfg.wMin.fard});
   return m/60}
-function fullSpiritualHours(cfg){return(COUNTERS.reduce(function(s,c){return s+cfg.wMin[c.id]},0)
-  +cfg.wMin.hizb*2+cfg.wMin.rabita+cfg.wMin.night+cfg.wMin.fard*5)/60}
+function fullSpiritualHours(cfg){
+  var m=COUNTERS.reduce(function(s,c){return s+cfg.wMin[c.id]},0);
+  CHECK_IDS.forEach(function(k){m+=cfg.wMin[k]||0});
+  m+=2*cfg.wMin.hizb+5*cfg.wMin.fard;
+  return m/60}
+function totalKhatmHizb(){var t=0;for(var k in state.days){var w=state.days[k].wird;if(w&&w.hizb)t+=w.hizb}return t}
+
+/* ── Balance (signature) ── */
+function renderMizan(lr,rr){
+  var diff=rr-lr,tilt=Math.max(-13,Math.min(13,diff*26)),rad=tilt*Math.PI/180;
+  var cx=150,cy=74,L=104,H=46;
+  var lx=cx-L*Math.cos(rad),ly=cy-L*Math.sin(rad),rx=cx+L*Math.cos(rad),ry=cy+L*Math.sin(rad);
+  function disc(id,i,px,py){var t=DOMAINS.find(function(d){return d.id===id});
+    return'<circle cx="'+(px+(i===0?-11:11))+'" cy="'+py+'" r="9" fill="'+t.color+'" stroke="#0f1319" stroke-width="1.5"/>'}
+  var left=DOMAINS.filter(function(d){return d.pan==="left"}),right=DOMAINS.filter(function(d){return d.pan==="right"});
+  var verdict="En équilibre";if(diff>0.18)verdict="Penché vers le travail";else if(diff<-0.18)verdict="Penché vers le repos & le sens";
+  return'<div class="mizan-wrap"><svg viewBox="0 0 300 172" width="100%" role="img" aria-label="Balance : '+verdict+'">'+
+    '<line x1="150" y1="74" x2="150" y2="150" stroke="#C9A24B" stroke-width="3"/>'+
+    '<polygon points="150,150 138,168 162,168" fill="#C9A24B"/>'+
+    '<g class="beam" style="transform-origin:150px 74px;transform:rotate('+tilt+'deg)">'+
+      '<line x1="'+lx+'" y1="'+ly+'" x2="'+rx+'" y2="'+ry+'" stroke="#C9A24B" stroke-width="4" stroke-linecap="round"/>'+
+      '<circle cx="150" cy="74" r="5" fill="#EDE6D6"/>'+
+      '<line x1="'+lx+'" y1="'+ly+'" x2="'+lx+'" y2="'+(ly+H)+'" stroke="#5b5344" stroke-width="1.5"/>'+
+      '<line x1="'+rx+'" y1="'+ry+'" x2="'+rx+'" y2="'+(ry+H)+'" stroke="#5b5344" stroke-width="1.5"/>'+
+      '<path d="M '+(lx-22)+' '+(ly+H)+' A 22 14 0 0 0 '+(lx+22)+' '+(ly+H)+'" fill="none" stroke="#8A8578" stroke-width="2"/>'+
+      '<path d="M '+(rx-22)+' '+(ry+H)+' A 22 14 0 0 0 '+(rx+22)+' '+(ry+H)+'" fill="none" stroke="#8A8578" stroke-width="2"/>'+
+      left.map(function(d,i){return disc(d.id,i,lx,ly+H+2)}).join("")+
+      right.map(function(d,i){return disc(d.id,i,rx,ry+H+2)}).join("")+
+    '</g></svg><div class="verdict">'+verdict+'</div></div>'}
 
 /* ── État ── */
 var lc=load("mizan:cfg",{});
@@ -195,17 +253,13 @@ function saveDays(){save("mizan:days",state.days)}
 function getDay(key){if(!state.days[key])state.days[key]={overrides:{},wird:{}};
   if(!state.days[key].overrides)state.days[key].overrides={};
   if(!state.days[key].wird)state.days[key].wird={};return state.days[key]}
-
 function dayValue(domId,date){var key=ymd(date),day=state.days[key];
   if(domId==="spirituel")return wirdHours(day&&day.wird,state.cfg);
   var ov=day&&day.overrides&&day.overrides[domId];
   if(ov!==undefined&&ov!==null)return ov;
   return state.cfg.base[isWeekend(date)?"weekend":"weekday"][domId]||0}
 
-/* ── Rendu ── */
-function h(tag,attrs,inner){var a="";for(var k in attrs){if(attrs[k]!=null)a+=" "+k+'="'+attrs[k]+'"'}
-  return"<"+tag+a+">"+(inner||"")+"</"+tag+">"}
-
+/* ── Rendu : composants wird ── */
 function renderSalat(times,wird,nextId){
   return SALAT.map(function(s){
     var active=nextId===s.id,prayed=!s.noPray&&wird[s.id];
@@ -231,11 +285,29 @@ function renderCounters(wird,cfg){
         '<button class="mn" data-action="wird-add" data-id="'+c.id+'" data-amt="-'+c.steps[1]+'">−</button>'+
       '</div></div>'}).join("")}
 
-function renderChecks(wird){
-  return'<div class="checks">'+CHECKS.map(function(ch){
-    return'<button class="chk'+(wird[ch.id]?" on":"")+'" data-action="wird-toggle" data-id="'+ch.id+'">'+
-      '<span class="box">'+(wird[ch.id]?"✓":"")+'</span>'+
-      '<span class="chk-l">'+ch.label+'</span><span class="chk-ar">'+ch.ar+'</span></button>'}).join("")+'</div>'}
+function renderCheck(id,wird){var m=CHECK_META[id];
+  return'<button class="chk'+(wird[id]?" on":"")+'" data-action="wird-toggle" data-id="'+id+'">'+
+    '<span class="box">'+(wird[id]?"✓":"")+'</span>'+
+    '<span class="chk-l">'+m.label+'</span><span class="chk-ar">'+m.ar+'</span></button>'}
+
+function renderCoran(wird){
+  var hz=wird.hizb||0;
+  var total=totalKhatmHizb(),done=Math.floor(total/60),cur=total%60,pct=cur/60*100;
+  return'<div class="hizb-row"><span class="name">الحزبان <em>(2 aḥzāb / jour)</em></span>'+
+    '<div class="adj"><button data-action="wird-hizb" data-amt="-1">−</button>'+
+    '<span class="tv sm">'+hz+'</span><button data-action="wird-hizb" data-amt="1">+</button></div></div>'+
+    '<div class="khatm"><div class="khatm-top"><span>Khatm n°<b>'+(done+1)+'</b></span>'+
+      '<span>ḥizb '+cur+' / 60</span></div>'+
+      '<div class="bar"><div class="fill" style="width:'+pct+'%"></div></div></div>'+
+    renderCheck("sourates",wird)}
+
+function renderSection(sec,wird,cfg){
+  var body="";
+  if(sec.counters)body=renderCounters(wird,cfg);
+  else if(sec.coran)body=renderCoran(wird);
+  else body=sec.checks.map(function(id){return renderCheck(id,wird)}).join("");
+  return'<div class="sec-h'+(sec===SECTIONS[0]?" sec-first":"")+'"><span>'+sec.fr+'</span>'+
+    '<span class="sec-ar">'+sec.ar+'</span></div>'+body}
 
 function renderToday(){
   var today=new Date(),key=ymd(today),cfg=state.cfg;
@@ -246,43 +318,22 @@ function renderToday(){
   var next=pray.find(function(s){return times[s.id]>nowH});
   var nextId=next?next.id:(pray.every(function(s){return times[s.id]<=nowH})?"fajr":null);
   var day=getDay(key),wird=day.wird;
+  var prog=SECTIONS.map(function(sec){return renderSection(sec,wird,cfg)}).join("");
   var temps=DOMAINS.filter(function(d){return!d.auto}).map(function(dom){
     var ov=day.overrides[dom.id],val=dayValue(dom.id,today),isOv=ov!==undefined&&ov!==null;
     return'<div class="trow"><span class="name"><span class="dot" style="background:'+dom.color+'"></span>'+dom.label+'</span>'+
-      '<div class="adj">'+
-      '<button data-action="temps" data-id="'+dom.id+'" data-amt="-0.5">−</button>'+
+      '<div class="adj"><button data-action="temps" data-id="'+dom.id+'" data-amt="-0.5">−</button>'+
       '<span class="tv'+(isOv?" ov":"")+'">'+fmt(val)+'</span>'+
       '<button data-action="temps" data-id="'+dom.id+'" data-amt="0.5">+</button>'+
       (isOv?'<button class="rst" data-action="temps-reset" data-id="'+dom.id+'">↺</button>':'')+
       '</div></div>'}).join("");
   return'<div class="salat-strip">'+renderSalat(times,wird,nextId)+'</div>'+
     '<div class="card"><div class="card-h">Programme spirituel <span class="wtime">'+fmt(wirdHours(wird,cfg))+'</span></div>'+
-      renderCounters(wird,cfg)+renderChecks(wird)+'</div>'+
+      prog+'</div>'+
     '<div class="card"><div class="card-h">Temps du jour</div>'+temps+
       '<p class="hint">Valeurs par défaut = ta journée-type ('+(isWeekend(today)?"week-end":"semaine")+'). Touche seulement pour corriger une exception. <b>↺</b> revient à la baseline.</p></div>'}
 
-function renderMizan(lr,rr){
-  var diff=rr-lr,tilt=Math.max(-13,Math.min(13,diff*26)),rad=tilt*Math.PI/180;
-  var cx=150,cy=74,L=104,H=46;
-  var lx=cx-L*Math.cos(rad),ly=cy-L*Math.sin(rad),rx=cx+L*Math.cos(rad),ry=cy+L*Math.sin(rad);
-  function disc(id,i,px,py){var t=DOMAINS.find(function(d){return d.id===id});
-    return'<circle cx="'+(px+(i===0?-11:11))+'" cy="'+py+'" r="9" fill="'+t.color+'" stroke="#0f1319" stroke-width="1.5"/>'}
-  var left=DOMAINS.filter(function(d){return d.pan==="left"}),right=DOMAINS.filter(function(d){return d.pan==="right"});
-  var verdict="En équilibre";if(diff>0.18)verdict="Penché vers le travail";else if(diff<-0.18)verdict="Penché vers le repos & le sens";
-  return'<div class="mizan-wrap"><svg viewBox="0 0 300 172" width="100%" role="img" aria-label="Balance : '+verdict+'">'+
-    '<line x1="150" y1="74" x2="150" y2="150" stroke="#C9A24B" stroke-width="3"/>'+
-    '<polygon points="150,150 138,168 162,168" fill="#C9A24B"/>'+
-    '<g class="beam" style="transform-origin:150px 74px;transform:rotate('+tilt+'deg)">'+
-      '<line x1="'+lx+'" y1="'+ly+'" x2="'+rx+'" y2="'+ry+'" stroke="#C9A24B" stroke-width="4" stroke-linecap="round"/>'+
-      '<circle cx="150" cy="74" r="5" fill="#EDE6D6"/>'+
-      '<line x1="'+lx+'" y1="'+ly+'" x2="'+lx+'" y2="'+(ly+H)+'" stroke="#5b5344" stroke-width="1.5"/>'+
-      '<line x1="'+rx+'" y1="'+ry+'" x2="'+rx+'" y2="'+(ry+H)+'" stroke="#5b5344" stroke-width="1.5"/>'+
-      '<path d="M '+(lx-22)+' '+(ly+H)+' A 22 14 0 0 0 '+(lx+22)+' '+(ly+H)+'" fill="none" stroke="#8A8578" stroke-width="2"/>'+
-      '<path d="M '+(rx-22)+' '+(ry+H)+' A 22 14 0 0 0 '+(rx+22)+' '+(ry+H)+'" fill="none" stroke="#8A8578" stroke-width="2"/>'+
-      left.map(function(d,i){return disc(d.id,i,lx,ly+H+2)}).join("")+
-      right.map(function(d,i){return disc(d.id,i,rx,ry+H+2)}).join("")+
-    '</g></svg><div class="verdict">'+verdict+'</div></div>'}
-
+/* ── Semaine ── */
 function renderWeek(){
   var today=new Date(),key=ymd(today),cfg=state.cfg,week=weekDates(today);
   var elapsed=week.filter(function(d){return ymd(d)<=key});
@@ -305,14 +356,15 @@ function renderWeek(){
       '<div class="bar"><div class="fill" style="width:'+pct+'%;background:'+dom.color+'"></div></div>'+
       (over?'<span class="over">dépassé de '+fmt(a-t)+'</span>':'')+'</div>'}).join("");
   var tot=DOMAINS.reduce(function(s,d){return s+actual[d.id]},0);
+  var total=totalKhatmHizb(),done=Math.floor(total/60);
   return renderMizan(lr,rr)+
     '<div class="pan-legend"><span><i style="background:#78A98E"></i>Restauration & sens</span>'+
     '<span><i style="background:#4C93A8"></i>Travail & progression</span></div>'+tracks+
-    '<div class="wtotal">Cumul écoulé : <strong>'+fmt(tot)+'</strong><span class="wt-sub"> · '+elapsed.length+'/7 jours</span></div>'}
+    '<div class="wtotal">Cumul écoulé : <strong>'+fmt(tot)+'</strong><span class="wt-sub"> · '+elapsed.length+'/7 jours · '+done+' khatm(s)</span></div>'}
 
+/* ── Réglages ── */
 function stepper(action,extra,val,amt){
-  return'<div class="stepper">'+
-    '<button data-action="'+action+'" '+extra+' data-amt="-'+amt+'">−</button>'+
+  return'<div class="stepper"><button data-action="'+action+'" '+extra+' data-amt="-'+amt+'">−</button>'+
     '<span>'+(Number.isInteger(val)?val:val.toFixed(1))+'</span>'+
     '<button data-action="'+action+'" '+extra+' data-amt="'+amt+'">+</button></div>'}
 
@@ -328,7 +380,11 @@ function renderSettings(){
     return'<button class="'+(cfg.method===m?"on":"")+'" data-action="method" data-id="'+m+'">'+m+'</button>'}).join("");
   var tgtRows=COUNTERS.map(function(c){
     return'<div class="set-row"><label>'+c.label+'</label>'+stepper("wtarget",'data-id="'+c.id+'"',cfg.wTarget[c.id],100)+'</div>'}).join("");
-  var minRows=[["tahlil","Tahlīl"],["salawat","Salawât"],["istighfar","Istighfâr"],["hizb","Hizb (chacun)"],["rabita","Rābita"],["night","Qiyām"],["fard","Farḍ (chaque prière)"]].map(function(p){
+  var minList=[["tahlil","Tahlīl"],["salawat","Ṣalawāt"],["istighfar","Istighfâr"],["witr","Witr"],
+    ["ishraq","Ishrāq"],["shuruq","Shurūq (2 rak)"],["duha","Ḍuḥā"],["rawatib","Rawātib"],
+    ["hizb","Ḥizb (chacun)"],["sourates","Wird des sourates"],["muhasaba","Muḥāsaba"],
+    ["rabita","Rābita"],["fard","Farḍ (chaque prière)"]];
+  var minRows=minList.map(function(p){
     return'<div class="set-row"><label>'+p[1]+'</label>'+stepper("wmin",'data-id="'+p[0]+'"',cfg.wMin[p[0]],5)+'</div>'}).join("");
   var preview=SALAT.filter(function(s){return!s.noPray}).map(function(s){return s.label+" "+fmtT(times[s.id])}).join(" · ");
   return'<div class="card"><div class="card-h">Journée-type — semaine</div>'+baseRows("weekday")+'</div>'+
@@ -345,6 +401,7 @@ function renderSettings(){
     '<p class="hint">Efface uniquement les exceptions et le wird saisis cette semaine. Ta journée-type reste intacte.</p>'+
     '<button class="danger" data-action="reset">'+(state.cleared?"Effacé ✓":"Effacer mes saisies de la semaine")+'</button>'}
 
+/* ── Rendu global ── */
 function render(){
   var body;
   if(state.tab==="today")body=renderToday();
@@ -366,6 +423,7 @@ document.getElementById("app").addEventListener("click",function(e){
   if(act==="salat"){var d=getDay(key);d.wird[id]=!d.wird[id];saveDays();return render()}
   if(act==="wird-add"){var d2=getDay(key),tgt=state.cfg.wTarget[id];
     d2.wird[id]=Math.max(0,Math.min(tgt,(d2.wird[id]||0)+amt));saveDays();return render()}
+  if(act==="wird-hizb"){var d6=getDay(key);d6.wird.hizb=Math.max(0,Math.min(2,(d6.wird.hizb||0)+amt));saveDays();return render()}
   if(act==="wird-toggle"){var d3=getDay(key);d3.wird[id]=!d3.wird[id];saveDays();return render()}
   if(act==="temps"){var d4=getDay(key),cur=dayValue(id,new Date());
     d4.overrides[id]=Math.max(0,cur+amt);saveDays();return render()}
@@ -381,13 +439,7 @@ document.getElementById("app").addEventListener("click",function(e){
 });
 
 render();
-</script>
-<script>
-if('serviceWorker' in navigator){
-  window.addEventListener('load',function(){
-    navigator.serviceWorker.register('sw.js').catch(function(e){console.log('SW',e)});
-  });
-}
+if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(e){console.log('SW',e)})})}
 </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-var CACHE = "mizan-v1";
+var CACHE = "mizan-v2";
 var ASSETS = [
   "./", "./index.html", "./manifest.json",
   "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png"
